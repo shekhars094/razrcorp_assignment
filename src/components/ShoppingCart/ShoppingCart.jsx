@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ShoppingCartContext } from "../../contexts/ShoppingCart";
 import styles from "./ShoppingCart.module.css";
 import { Button } from "../Common/Button";
+import { removeItem } from "localforage";
 
 export const ShoppingCart = () => {
   const { cart, setCart } = useContext(ShoppingCartContext);
@@ -89,6 +90,13 @@ export const ShoppingCart = () => {
 const ShoppingCardItem = ({ id, name, price, image, quantity }) => {
   const { cart, setCart } = useContext(ShoppingCartContext);
 
+  const removeItem = (id) => {
+    const newCart = [...cart];
+    const index = newCart.findIndex((item) => item.id === id);
+    newCart.splice(index, 1);
+    setCart(newCart);
+  };
+
   return (
     <div
       style={{
@@ -109,10 +117,7 @@ const ShoppingCardItem = ({ id, name, price, image, quantity }) => {
         label="Remove Item"
         type={"danger"}
         onClick={() => {
-          const newCart = [...cart];
-          const index = newCart.findIndex((item) => item.id === id);
-          newCart.splice(index, 1);
-          setCart(newCart);
+          removeItem(id);
         }}
       />
     </div>

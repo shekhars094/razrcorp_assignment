@@ -127,6 +127,14 @@ export const ProductPage = () => {
     },
   ];
 
+  const searchFilter = (e) => {
+    setSearch(e.target.value);
+    const newProducts = products.filter((product) => {
+      return product.name.toLowerCase().includes(e.target.value.toLowerCase());
+    });
+    setFilteredProducts(newProducts);
+  };
+
   const [search, setSearch] = useState("");
   const [filteredProducts, setFilteredProducts] = useState(products);
 
@@ -136,15 +144,7 @@ export const ProductPage = () => {
         type="text"
         placeholder="Search"
         value={search}
-        onChange={(e) => {
-          setSearch(e.target.value);
-          const newProducts = products.filter((product) => {
-            return product.name
-              .toLowerCase()
-              .includes(e.target.value.toLowerCase());
-          });
-          setFilteredProducts(newProducts);
-        }}
+        onChange={searchFilter}
         className={`${styles["search_input"]}`}
       />
 
