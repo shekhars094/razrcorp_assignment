@@ -2,6 +2,9 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  width: 80%;
+  margin: 0 auto;
+  gap: "8px";
 }
 
 .product_page_container {
