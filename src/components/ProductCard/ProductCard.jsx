@@ -3,7 +3,7 @@ import styles from "./ProductCard.module.css";
 import { ShoppingCartContext } from "../../contexts/ShoppingCart";
 import { Button } from "../Common/Button";
 
-export const ProductCard = ({ name, price, image }) => {
+export const ProductCard = ({ id, name, price, image }) => {
   const { cart, setCart } = useContext(ShoppingCartContext);
 
   return (
@@ -15,7 +15,8 @@ export const ProductCard = ({ name, price, image }) => {
       <Button
         label="Add to cart"
         onClick={() => {
-          setCart([...cart, { name, price, image }]);
+          setCart([...cart, { id, name, price, image }]);
+          alert("Added to cart");
         }}
       />
     </div>

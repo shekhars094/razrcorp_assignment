@@ -1,10 +1,35 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ShoppingCartContext } from "../../contexts/ShoppingCart";
 import styles from "./ShoppingCart.module.css";
 import { Button } from "../Common/Button";
 
 export const ShoppingCart = () => {
   const { cart, setCart } = useContext(ShoppingCartContext);
+
+  const [productQuantity, setProductQuantity] = useState({});
+  const [uniqueCart, setUniqueCart] = useState([]);
+
+  useEffect(() => {
+    const newProductQuantity = {};
+    cart.forEach((item) => {
+      if (newProductQuantity[item.id]) {
+        newProductQuantity[item.id] += 1;
+      } else {
+        newProductQuantity[item.id] = 1;
+      }
+    });
+    setProductQuantity(newProductQuantity);
+  }, [cart]);
+
+  useEffect(() => {
+    const newUniqueCart = [];
+    cart.forEach((item) => {
+      if (!newUniqueCart.find((cartItem) => cartItem.id === item.id)) {
+        newUniqueCart.push(item);
+      }
+    });
+    setUniqueCart(newUniqueCart);
+  }, [cart]);
 
   const total = cart.reduce((acc, item) => {
     return acc + item.price;
@@ -28,13 +53,15 @@ export const ShoppingCart = () => {
   return (
     <div className={`${styles["cart_page_container"]}`}>
       <div className={`${styles["cart_container"]}`}>
-        {cart.map((item, index) => {
+        {uniqueCart.map((item, index) => {
           return (
             <ShoppingCardItem
               key={index}
+              id={item.id}
               name={item.name}
               price={item.price}
               image={item.image}
+              quantity={productQuantity[item.id]}
             />
           );
         })}
@@ -59,7 +86,7 @@ export const ShoppingCart = () => {
   );
 };
 
-const ShoppingCardItem = ({ name, price, image }) => {
+const ShoppingCardItem = ({ id, name, price, image, quantity }) => {
   const { cart, setCart } = useContext(ShoppingCartContext);
 
   return (
@@ -76,13 +103,14 @@ const ShoppingCardItem = ({ name, price, image }) => {
       <img src={image} alt={name} width={200} height={200} />
       <h3>{name}</h3>
       <p>{price}</p>
+      <p>Quantity: {quantity}</p>
       <Button
         label="Remove Item"
         type={"danger"}
         onClick={() => {
-          const newCart = cart.filter((item) => {
-            return item.name !== name;
-          });
+          const newCart = [...cart];
+          const index = newCart.findIndex((item) => item.id === id);
+          newCart.splice(index, 1);
           setCart(newCart);
         }}
       />
