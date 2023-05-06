@@ -1,0 +1,16 @@
+.nav__bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  background: #ccc;
+  padding: 24px;
+}
+
+.nav__bar__button {
+  background: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
